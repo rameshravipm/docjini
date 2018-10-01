@@ -1,0 +1,13 @@
+'use strict';
+
+var mongoose = require('mongoose');
+console.log(mongoose);
+var receiptSchema = mongoose.schema({
+  _id: mongoose.Schema.Types.ObjectId,
+  storeName: String,
+  total: Number,
+  currency: String,
+  userId: String
+});
+
+module.exports = mongoose.model('Receipt', receiptSchema);
