@@ -17,7 +17,6 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 var router = _express2.default.Router();
 
 
-console.log(_Receipt2.default);
 // GET ALL DATA
 router.get('/', function (req, res) {
   console.log("heeeh");
@@ -34,7 +33,6 @@ router.get('/', function (req, res) {
 
 // CREATE NEW DATA
 router.post('/', function (req, res) {
-  console.log(req.body);
   if (!req.body.storeName) {
     return;
   }
