@@ -1,5 +1,7 @@
 'use strict';
 
+var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
+
 var _express = require('express');
 
 var _express2 = _interopRequireDefault(_express);
@@ -18,9 +20,10 @@ var router = _express2.default.Router();
 
 
 // GET ALL DATA
-router.get('/', function (req, res) {
-  console.log("heeeh");
-  _Receipt2.default.find().exec().then(function (docs) {
+router.get('/:userId', function (req, res) {
+  var userId = req.params.userId;
+  console.log(userId);
+  _Receipt2.default.find({ userId: userId }).exec().then(function (docs) {
     console.log(docs);
     res.status(200).json(docs);
   }).catch(function (err) {
@@ -70,7 +73,8 @@ router.get('/:id', function (req, res) {
 });
 
 // UPDATE DATA
-router.patch('/:id', function (req, res) {
+router.patch('/:userId/:id', function (req, res) {
+  var userId = req.params.userId;
   var id = req.params.id;
   var updateOps = {};
   var _iteratorNormalCompletion = true;
@@ -78,10 +82,15 @@ router.patch('/:id', function (req, res) {
   var _iteratorError = undefined;
 
   try {
-    for (var _iterator = req.body[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-      var ops = _step.value;
+    for (var _iterator = Object.entries(req.body)[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+      var _ref = _step.value;
 
-      updateOps[ops.propName] = ops.value;
+      var _ref2 = _slicedToArray(_ref, 2);
+
+      var key = _ref2[0];
+      var value = _ref2[1];
+
+      updateOps[key] = value;
     }
   } catch (err) {
     _didIteratorError = true;
@@ -98,7 +107,7 @@ router.patch('/:id', function (req, res) {
     }
   }
 
-  _Receipt2.default.update({ _id: id }, { $set: updateOps }).exec().then(function (result) {
+  _Receipt2.default.update({ userId: userId, _id: id }, { $set: updateOps }).exec().then(function (result) {
     console.log(result);
     res.status(200).json(result);
   }).catch(function (err) {
@@ -110,9 +119,10 @@ router.patch('/:id', function (req, res) {
 });
 
 // DELETE DATA
-router.delete('/:id', function (req, res) {
+router.delete('/:userId/:id', function (req, res) {
   var id = req.params.id;
-  _Receipt2.default.remove({ _id: id }).exec().then(function (result) {
+  var userId = req.params.userId;
+  _Receipt2.default.remove({ _id: id, userId: userId }).exec().then(function (result) {
     console.log(result);
     res.status(200).json(result);
   }).catch(function (err) {
