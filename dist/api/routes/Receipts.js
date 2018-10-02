@@ -20,19 +20,7 @@ var router = _express2.default.Router();
 
 
 // GET ALL DATA
-router.get('/:userId', function (req, res) {
-  var userId = req.params.userId;
-  console.log(userId);
-  _Receipt2.default.find({ userId: userId }).exec().then(function (docs) {
-    console.log(docs);
-    res.status(200).json(docs);
-  }).catch(function (err) {
-    console.log(err);
-    res.status(500).json({
-      error: err
-    });
-  });
-});
+
 
 router.get('/:userId/:id', function (req, res) {
   var userId = req.params.userId;
